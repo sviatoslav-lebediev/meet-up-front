@@ -7,20 +7,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meet-up</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"
+        integrity="sha512-J67nm7fNdd/paUQlLxKoReUffdsPRGHCOYkVwRGUSDv/NE5DJtL6Siinn+s8rZMYJDQJRiPdWjs/PHvjMLnKiw=="
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div class="flex h-screen justify-center items-center">
         <div class="text-center">
             <h1 class="text-3xl">The best programming language is:</h1>
-            <h1 class="text-3xl">????</h1>
+            <h1 class="text-3xl m-3" id="result">????</h1>
             <div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="reload">
                     Click the button
                 </button>
             </div>
         </div>
     </div>
+    <script>
+        Zepto(function ($) {
+            $('#reload').on('click', () => {
+                fetch('https://api.meet-up.proto.click/languages')
+                    .then(response => response.json())
+                    .then(items => {
+                        const position = Math.round(Math.random() * (items.length - 1));
+                        const { name, description } = items[position];
+
+                        $('#result').text(`${name}-${description}`);
+                    })
+                    .catch(error => alert(error.message))
+            })
+        })
+    </script>
 </body>
 
 </html>
